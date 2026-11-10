@@ -1,2 +1,0 @@
-# DGS00113-CSharp
-DGS00113-CSharp

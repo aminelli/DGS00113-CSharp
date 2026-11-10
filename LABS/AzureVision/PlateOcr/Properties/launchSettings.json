@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "PlateOcr": {
+      "commandName": "Project",
+      "commandLineArgs": "--input \"D:/Temp/cSharp/LABS/ComputerVision/L001/FOTO\" --output \"D:/Temp/cSharp/LABS/ComputerVision/L001/JSON\"",
+      "environmentVariables": {
+        "VISION_ENDPOINT": "https://xxxxxxxxxxxxxxxx.cognitiveservices.azure.com/",
+        "VISION_KEY": "xxxxxxxxxxxxxxxxxxxxxx"
+      }
+    }
+  }
+}
