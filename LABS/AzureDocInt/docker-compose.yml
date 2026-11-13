@@ -1,0 +1,39 @@
+services:
+  sqlserver:
+    build:
+      context: .
+      dockerfile: Dockerfile.sqlserver
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: Developer
+      MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD:?Set MSSQL_SA_PASSWORD in .env}
+    ports:
+      - "127.0.0.1:${SQLSERVER_HOST_PORT:-1433}:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD", "/bin/bash", "-c", "echo > /dev/tcp/127.0.0.1/1433"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 20s
+
+  database-init:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["--init-db"]
+    environment:
+      SQLSERVER_HOST: sqlserver
+      SQLSERVER_PORT: "1433"
+      SQLSERVER_DATABASE: InvoiceDb
+      SQLSERVER_USER: sa
+      SQLSERVER_PASSWORD: ${MSSQL_SA_PASSWORD:?Set MSSQL_SA_PASSWORD in .env}
+      SQLSERVER_TRUST_SERVER_CERTIFICATE: "true"
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    restart: "no"
+
+volumes:
+  sqlserver_data:
